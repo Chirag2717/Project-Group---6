@@ -1,36 +1,47 @@
-const app = require('koa')();
-const router = require('koa-router')();
-const db = require('./db.json');
+const express = require('express');
 
-// Log requests
-app.use(function *(next){
-  const start = new Date;
-  yield next;
-  const ms = new Date - start;
-  console.log('%s %s - %s', this.method, this.url, ms);
+const app = express();
+ 
+// Sample Posts Data
+
+const posts = [
+
+    { thread: 1, text: "That last goal was awesome!", user: 4 },
+
+    { thread: 1, text: "Yes, the way the ball swerved... What talent!", user: 2 },
+
+    { thread: 2, text: "I have to try their tarts!", user: 3 },
+
+    { thread: 2, text: "I'm planning to stop by in the morning to try their croissants.", user: 2 },
+
+    { thread: 2, text: "I could go for a chocolate éclair!", user: 1 },
+
+    { thread: 3, text: "I need a new acoustic guitar at a good price.", user: 1 }
+
+];
+ 
+// Get all posts
+
+app.get('/posts', (req, res) => {
+
+    res.json(posts);
+
 });
+ 
+// Get posts by thread ID
 
-router.get('/api/posts/in-thread/:threadId', function *() {
-  const id = parseInt(this.params.threadId);
-  this.body = db.posts.filter((post) => post.thread == id);
+app.get('/posts/:thread', (req, res) => {
+
+    const threadPosts = posts.filter(p => p.thread === parseInt(req.params.thread));
+
+    if (threadPosts.length === 0) return res.status(404).send("No posts found for this thread");
+
+    res.json(threadPosts);
+
 });
+ 
+// Start the server
 
-router.get('/api/posts/by-user/:userId', function *() {
-  const id = parseInt(this.params.userId);
-  this.body = db.posts.filter((post) => post.user == id);
-});
+app.listen(4003, () => console.log('Posts Service running on port 4003'));
 
-router.get('/api/', function *() {
-  this.body = "API ready to receive requests";
-});
-
-router.get('/', function *() {
-  this.body = "Ready to receive requests";
-});
-
-app.use(router.routes());
-app.use(router.allowedMethods());
-
-app.listen(3000);
-
-console.log('Worker started');
+ 
