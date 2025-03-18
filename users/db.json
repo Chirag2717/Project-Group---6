@@ -2,25 +2,25 @@
   "users": [
     {
       "id": 1,
-      "username": "marceline",
+      "username": "Chirag",
       "name": "Marceline Singer",
       "bio": "Cyclist, musician"
     },
     {
       "id": 2,
-      "username": "finn",
+      "username": "Kamal",
       "name": "Finn Alberts",
       "bio": "Adventurer and hero, defender of good"
     },
     {
       "id": 3,
-      "username": "pb",
+      "username": "Kunal",
       "name": "Paul Barium",
       "bio": "Scientist, cake lover"
     },
     {
       "id": 4,
-      "username": "jake",
+      "username": "Khurana",
       "name": "Jake Storm",
       "bio": "Soccer fan, sky diver"
     }
