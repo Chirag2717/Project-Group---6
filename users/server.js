@@ -1,35 +1,25 @@
-const app = require('koa')();
-const router = require('koa-router')();
-const db = require('./db.json');
-
-// Log requests
-app.use(function *(next){
-  const start = new Date;
-  yield next;
-  const ms = new Date - start;
-  console.log('%s %s - %s', this.method, this.url, ms);
+const express = require('express');
+const app = express();
+ 
+// Sample Users Data
+const users = [
+    { id: 1, username: "Chirag", name: "Marceline Singer", bio: "Cyclist, musician" },
+    { id: 2, username: "Kamal", name: "Finn Alberts", bio: "Adventurer and hero, defender of good" },
+    { id: 3, username: "Kunal", name: "Paul Barium", bio: "Scientist, cake lover" },
+    { id: 4, username: "Khurana", name: "Jake Storm", bio: "Soccer fan, skydiver" }
+];
+ 
+// Get all users
+app.get('/users', (req, res) => {
+    res.json(users);
 });
-
-router.get('/api/users', function *(next) {
-  this.body = db.users;
+ 
+// Get user by ID
+app.get('/users/:id', (req, res) => {
+    const user = users.find(u => u.id === parseInt(req.params.id));
+    if (!user) return res.status(404).send("User not found");
+    res.json(user);
 });
-
-router.get('/api/users/:userId', function *(next) {
-  const id = parseInt(this.params.userId);
-  this.body = db.users.find((user) => user.id == id);
-});
-
-router.get('/api/', function *() {
-  this.body = "API ready to receive requests";
-});
-
-router.get('/', function *() {
-  this.body = "Ready to receive requests";
-});
-
-app.use(router.routes());
-app.use(router.allowedMethods());
-
-app.listen(3000);
-
-console.log('Worker started');
+ 
+// Start the server
+app.listen(4002, () => console.log('Users Service running on port 4002'));
